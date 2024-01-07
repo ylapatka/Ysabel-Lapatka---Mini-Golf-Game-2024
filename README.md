@@ -1,3 +1,5 @@
+Note -- You need to have npm and node installed to read all dependencies, then run node server.js to start the server. 
+
 This is a browser based Miniature Golf game. The game is built on JavaScript and uses libraries like Three.js and Cannon.js 
 to help create realistic and lifelike objects and physics. These libraries all help to create a 3D environment that a user can 
 experience on the browser. 
