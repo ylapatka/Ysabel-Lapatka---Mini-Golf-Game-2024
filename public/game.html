@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Three.js Project</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+        }
+        canvas { 
+            width: 100%;
+            height: 100%;
+        }
+        .infoBox {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            z-index: 1000;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            position: absolute;
+            top: 25px;
+            display: none;
+        }
+        .infoBox p {
+            margin-top: 0;
+            color: #333;
+        }
+        .infoBox button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #yesTutorial {
+            background-color: #28a745; 
+        }
+        #yesTutorial:hover {
+            background-color: #218838; 
+        }
+    
+        #noTutorial {
+            background-color: #dc3545; 
+        }
+        #noTutorial:hover {
+            background-color: #c82333; 
+        }
+        #closeTutorial {
+            background-color: #dc3545; 
+        }
+        #closeTutorial:hover {
+            background-color: #c82333; 
+        }
+        #hitCounter {
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #courseCounterContainer {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            text-align: center;
+            width: 80%;
+        }
+        
+        #courseTable {
+            margin: auto;
+            border-collapse: separate; 
+            border-spacing: 0; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+        
+        #courseTable th, #courseTable td {
+            border: 1px solid #ddd; 
+            padding: 12px 15px; 
+            text-align: center; 
+            background-color: #f9f9f9; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        
+        #courseTable th:hover {
+            background-color: #e8e8e8; 
+        }
+        
+        #courseTable th {
+            background-color: #5c946e; 
+            color: white; 
+            font-weight: 500; 
+        }
+        
+        #toggleButton {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 10px;
+            border: none;
+            background-color: #5c946e; 
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom-left-radius: 8px; 
+            transition: background-color 0.3s ease;
+        }
+        
+        #toggleButton:hover {
+            background-color: #50795c; 
+        }
+        #waitingMessage {
+            position: absolute;     
+            top: 50%;              
+            left: 50%;               
+            transform: translate(-50%, -50%); 
+            font-size: 30px;        
+            text-align: center;    
+          }
+          #playerNumber {
+            position: absolute;                   
+            font-size: 20px;
+            left: 10px;       
+            
+          }
+          #completionMessage {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        #completionMessage p {
+            margin-top: 0;
+            color: #333;
+            font-size: 20px; 
+        }
+        
+        #disconnectButton1 {
+            background-color: #dc3545; 
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        #disconnectButton1:hover {
+            background-color: #c82333; 
+        }
+        #disconnectButton2 {
+            background-color: #dc3545; 
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        #disconnectButton2:hover {
+            background-color: #c82333; 
+        }
+        
+        #disconnectMessage {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            position: absolute;
+            top: 40%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            display: none; 
+        }
+        
+   
+        
+    </style>
+</head>
+<body>
+    <div id="hitCounter">Hits: 0</div>
+    <div id="tutorialPrompt" class="infoBox" style="left: 10px;">
+        <p>Do you want a tutorial?</p>
+        <button id="yesTutorial">Yes</button>
+        <button id="noTutorial">No</button>
+    </div>
+    
+    <div id="tutorialTips" class="infoBox" style="left: 10px;">
+        <p>Tip 1: Use your mouse to drag and hit the ball.</p>
+        <p>Tip 2: The longer the drag, the stronger the hit.</p>
+        <button id="closeTutorial">Close Tutorial</button>
+    </div>
+    <div id="courseCounterContainer">
+        <table id="courseTable" style="display: none;">
+            <tr>
+                <th>Player</th>
+                <th>Course 1</th>
+                <th>Course 2</th>
+                <th>Course 3</th>
+                <th>Course 4</th>
+                <th>Course 5</th>
+                <th>Course 6</th>
+                <th>Course 7</th>
+                <th>Course 8</th>
+                <th>Course 9</th>
+                <th>Total Score</th>
+            </tr>
+            <tr id="courseData">
+            </tr>
+        </table>
+        <button id="toggleButton">Toggle Score Card</button>
+    </div>
+    <div id="waitingMessage"></div>
+    <div id="playerNumber"></div>
+    <div id="completionMessage" style="display: none;">
+        <p>All courses completed</p>
+        <button id="disconnectButton1">Disconnect</button>
+    </div>
+    <div id="disconnectMessage" style="display: none;">
+        <p id="disconnectText"></p>
+        <button id="disconnectButton2">Disconnect</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="dragController.js"></script>
+    <script src="fairway.js"></script>
+    <script src="ball.js"></script>
+    <script src="hole.js"></script>
+    <script src="wall.js"></script>
+    <script src="rock.js"></script>
+    <script src="waterHazard.js"></script>
+    <script src="bunker.js"></script>
+    <script src="windmill.js"></script>
+    <script src="statue.js"></script>
+    <script src="configurations.js"></script>
+    <script src="main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', (event) => {
+    
+    const tutorialPrompt = document.getElementById('tutorialPrompt');
+    tutorialPrompt.style.display = 'block';
+
+    document.getElementById('yesTutorial').addEventListener('click', function() {
+        tutorialPrompt.style.display = 'none';
+        document.getElementById('tutorialTips').style.display = 'block';
+    });
+
+    document.getElementById('noTutorial').addEventListener('click', function() {
+        tutorialPrompt.style.display = 'none';
+    });
+
+    document.getElementById('closeTutorial').addEventListener('click', function() {
+        document.getElementById('tutorialTips').style.display = 'none';
+    });
+
+    document.getElementById('disconnectButton1').addEventListener('click', function() {
+    window.location.href = 'index.html';
+
+    });
+    document.getElementById('disconnectButton2').addEventListener('click', function() {
+        window.location.href = 'index.html';
+    });
+});
+</script>
+</body>
+</html>
+

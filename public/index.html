@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf Game - Choose Mode</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('/assets/golf-game.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: #fff;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: -1;
+        }
+
+        h1 {
+            background-color: rgba(0, 0, 0, 0.7); 
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50; 
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #multiplayer {
+            background-color: #008CBA; 
+        }
+
+        #multiplayer:hover {
+            background-color: #007ba7;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div> 
+    <h1>Welcome to the Golf Game</h1>
+    <button id="singlePlayer">Single Player</button>
+    <button id="multiplayer">Multiplayer</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        // Function to handle game mode selection and redirect to the game page
+        function selectGameMode(isMultiplayer) {
+            localStorage.setItem('isMultiplayer', isMultiplayer);
+            window.location.href = '/color-selection';
+        }
+
+        document.getElementById('singlePlayer').addEventListener('click', function() {
+            selectGameMode(false);
+        });
+
+        document.getElementById('multiplayer').addEventListener('click', function() {
+            selectGameMode(true);
+        });
+    </script>
+</body>
+</html>
+
